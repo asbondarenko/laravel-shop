@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,12 +14,16 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::apiResource('products', ProductController::class)->except(['delete']);
-
-Route::prefix('products')->group(
+Route::prefix('v1')->group(
     function () {
-        Route::delete('/{product}/archive', [ProductController::class, 'archive']);
-        Route::put('/{id}/restore', [ProductController::class, 'restore']);
-    }
-);
+        Route::apiResource('products', ProductController::class)->except(['delete']);
+        Route::apiResource('categories', CategoryController::class);
+
+        Route::prefix('products')->group(
+            function () {
+                Route::delete('/{product}/archive', [ProductController::class, 'archive']);
+                Route::put('/{id}/restore', [ProductController::class, 'restore']);
+            }
+        );
+    });
+

@@ -12,7 +12,12 @@ class ProductService
      */
     public function create($data)
     {
-        return Product::create($data);
+        $product = Product::create($data);
+
+        $product->categories()->attach($data['categories']);
+        $product->load('categories');
+
+        return $product;
     }
 
     /**
@@ -23,6 +28,10 @@ class ProductService
     public function update($data, Product $product): Product
     {
         $product->update($data);
+
+        $product->categories()->sync($data['categories']);
+        $product->load('categories');
+
         return $product;
     }
 

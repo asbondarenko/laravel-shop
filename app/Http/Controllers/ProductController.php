@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        $products = Product::jsonPaginate();
+        $products = Product::makeBuilder()->with('categories')->jsonPaginate();
         return ProductResource::collection($products);
     }
 
