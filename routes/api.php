@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('products', ProductController::class)->except(['delete']);
+
+Route::prefix('products')->group(
+    function () {
+        Route::delete('/{product}/archive', [ProductController::class, 'archive']);
+        Route::put('/{id}/restore', [ProductController::class, 'restore']);
+    }
+);
